@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                bat "docker build -t='brudocker/selenium-docker' ."
+                bat "docker build -t=brudocker/selenium-docker ."
             }
         }
         stage('Push Image') {
