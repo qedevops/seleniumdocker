@@ -1,31 +1,20 @@
 pipeline {
-    agent none
+    agent any
     stages {
         stage('Build Jar') {
-            agent {
-                docker {
-                    image 'maven:3-alpine'
-                    args '-v c:/JenkinsSlave/m2:/root/.m2'
-                }
-            }
             steps {
-                sh 'mvn clean package -DskipTests'
+                bat "mvn clean package -DskipTests"
             }
         }
         stage('Build Image') {
             steps {
-                script {
-                	app = docker.build("brudocker/selenium-docker")
-                }
+                bat "docker build -t='brudocker/selenium-docker' ."
             }
         }
         stage('Push Image') {
             steps {
-                script {
-			        docker.withRegistry('https://registry.hub.docker.com', 'DockerCred') {
-			        	app.push("${BUILD_NUMBER}")
-			            app.push("latest")
-			        }
+               withDockerRegistry([ credentialsId: "DockerCred", url: "" ]) {
+                    bat "docker push brudocker/selenium-docker:latest"
                 }
             }
         }
