@@ -5,7 +5,7 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3-alpine'
-                    args '-v $HOME/.m2:/root/.m2'
+                    args '-v c:/JenkinsSlave/.m2:/root/.m2'
                 }
             }
             steps {
@@ -15,14 +15,14 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                	app = docker.build("vinsdocker/selenium-docker")
+                	app = docker.build("brudocker/selenium-docker")
                 }
             }
         }
         stage('Push Image') {
             steps {
                 script {
-			        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+			        docker.withRegistry('https://registry.hub.docker.com', 'DockerCred') {
 			        	app.push("${BUILD_NUMBER}")
 			            app.push("latest")
 			        }
