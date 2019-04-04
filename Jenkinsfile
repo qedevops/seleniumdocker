@@ -15,7 +15,6 @@ pipeline {
             steps {
                withDockerRegistry([ credentialsId: "DockerCred", url: "" ]) {
                     bat "docker push brudocker/selenium-docker:latest"
-                    bat "docker push brudocker/selenium-docker:${BUILD_NUMBER}"
                 }
             }
         }
